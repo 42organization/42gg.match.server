@@ -2,38 +2,28 @@
 name = "app"
 version = "0.1.0"
 description = ""
-authors = ["Admin <admin@example.com>"]
+authors = ["jaehyuki <jhkim0097@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.10"
-uvicorn = {extras = ["standard"], version = "^0.24.0.post1"}
-fastapi = "^0.109.1"
-python-multipart = "^0.0.7"
-email-validator = "^2.1.0.post1"
-passlib = {extras = ["bcrypt"], version = "^1.7.4"}
-tenacity = "^8.2.3"
-pydantic = ">2.0"
-emails = "^0.6"
-
-gunicorn = "^22.0.0"
-jinja2 = "^3.1.4"
-alembic = "^1.12.1"
-httpx = "^0.25.1"
-psycopg = {extras = ["binary"], version = "^3.1.13"}
-sqlmodel = "^0.0.19"
-# Pin bcrypt until passlib supports the latest
-bcrypt = "4.0.1"
-pydantic-settings = "^2.2.1"
-sentry-sdk = {extras = ["fastapi"], version = "^1.40.6"}
-pyjwt = "^2.8.0"
+python = "^3.10"  # 프로젝트에 사용되는 Python 버전
+uvicorn = {extras = ["standard"], version = "^0.24.0.post1"}  # ASGI 서버
+fastapi = "^0.109.1"  # FastAPI 프레임워크
+python-multipart = "^0.0.7"  # Multipart/form-data 지원
+email-validator = "^2.1.0.post1"  # 이메일 주소 유효성 검사
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}  # 비밀번호 해싱 라이브러리
+tenacity = "^8.2.3"  # 재시도 로직을 쉽게 구현하기 위한 라이브러리
+pydantic = ">2.0"  # 데이터 유효성 검사 및 설정 관리
+httpx = "^0.25.1"  # HTTP 요청을 보내기 위한 라이브러리
+bcrypt = "4.0.1"  # Bcrypt 해싱 알고리즘, passlib과 함께 사용
+pyjwt = "^2.8.0"  # JSON 웹 토큰(JWT) 생성 및 검증
 
 [tool.poetry.group.dev.dependencies]
-pytest = "^7.4.3"
-mypy = "^1.8.0"
-ruff = "^0.2.2"
-pre-commit = "^3.6.2"
-types-passlib = "^1.7.7.20240106"
-coverage = "^7.4.3"
+pytest = "^7.4.3"  # 테스트 프레임워크
+mypy = "^1.8.0"  # 정적 타입 검사기
+ruff = "^0.2.2"  # Python 코드 스타일 검사기
+pre-commit = "^3.6.2"  # Git pre-commit 훅 관리 도구
+types-passlib = "^1.7.7.20240106"  # Passlib의 타입 힌트
+coverage = "^7.4.3"  # 코드 커버리지 측정 도구
 
 [build-system]
 requires = ["poetry>=0.12"]
@@ -41,11 +31,11 @@ build-backend = "poetry.masonry.api"
 
 [tool.mypy]
 strict = true
-exclude = ["venv", ".venv", "alembic"]
+exclude = ["venv", ".venv"]
 
 [tool.ruff]
 target-version = "py310"
-exclude = ["alembic"]
+exclude = ["venv", ".venv"]
 
 [tool.ruff.lint]
 select = [
@@ -66,5 +56,4 @@ ignore = [
 ]
 
 [tool.ruff.lint.pyupgrade]
-# Preserve types, even if a file imports `from __future__ import annotations`.
-keep-runtime-typing = true
+keep-runtime-typing = true  # Preserve types, even if a file imports `from __future__ import annotations`.
