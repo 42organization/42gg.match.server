@@ -15,5 +15,8 @@ async def forbidden_exception_handler(request: Request, exc: ForbiddenException)
 async def bad_request_exception_handler(request: Request, exc: BadRequestException):
     return JSONResponse(status_code=exc.status_code, content={"message": exc.detail})
 
-async def custom_exception_handler(request: Request, exc: CustomException):
-    return JSONResponse(status_code=400, content={"name": exc.name, "message": exc.detail})
+async def unexpected_exception_handler(request: Request, exc: BaseException):
+    return JSONResponse(status_code=500, content={"message": "Intrenal Server Error"})
+
+# async def custom_exception_handler(request: Request, exc: CustomException):
+#     return JSONResponse(status_code=400, content={"name": exc.name, "message": exc.detail})

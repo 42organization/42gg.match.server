@@ -5,7 +5,7 @@ from app.exceptions.handlers import (
     unauthorized_exception_handler,
     forbidden_exception_handler,
     bad_request_exception_handler,
-    custom_exception_handler
+    unexpected_exception_handler
 )
 from app.exceptions.http_exceptions import NotFoundException, UnauthorizedException, ForbiddenException, BadRequestException
 from app.exceptions.custom_exceptions import CustomException
@@ -31,7 +31,7 @@ app.add_exception_handler(NotFoundException, not_found_exception_handler)
 app.add_exception_handler(UnauthorizedException, unauthorized_exception_handler)
 app.add_exception_handler(ForbiddenException, forbidden_exception_handler)
 app.add_exception_handler(BadRequestException, bad_request_exception_handler)
-app.add_exception_handler(CustomException, custom_exception_handler)
+app.add_exception_handler(BaseException, unexpected_exception_handler)
 
 @app.get("/")
 def read_root():
