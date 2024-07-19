@@ -8,8 +8,6 @@ from app.exceptions.handlers import (
     unexpected_exception_handler
 )
 from app.exceptions.http_exceptions import NotFoundException, UnauthorizedException, ForbiddenException, BadRequestException
-from app.exceptions.custom_exceptions import CustomException
-
 
 # FastAPI 인스턴스, docs 설정
 app = FastAPI(    title="42gg.match.server API",
@@ -31,7 +29,7 @@ app.add_exception_handler(NotFoundException, not_found_exception_handler)
 app.add_exception_handler(UnauthorizedException, unauthorized_exception_handler)
 app.add_exception_handler(ForbiddenException, forbidden_exception_handler)
 app.add_exception_handler(BadRequestException, bad_request_exception_handler)
-app.add_exception_handler(BaseException, unexpected_exception_handler)
+app.add_exception_handler(Exception, unexpected_exception_handler)
 
 @app.get("/")
 def read_root():
