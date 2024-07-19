@@ -8,5 +8,6 @@ class FortyTwoAPIService:
         self.base_url = settings.forty_two_api_base_url
         self.client_id = settings.oauth_client_id
         self.client_secret = settings.oauth_client_secret
+        self.redirect_uri = settings.oauth_redirect_uri
 
 forty_two_api_service = FortyTwoAPIService()
