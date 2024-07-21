@@ -1,15 +1,23 @@
 import os
-from pydantic import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
-    app_name: str = "42gg.match.server"
-    api_v1_str: str = "/api/v1"
-    secret_key: str = os.getenv("SECRET_KEY", "supersecretkey")
-    redis_url: str = os.getenv("REDIS_URL", "redis://localhost:6379/0")
-    oauth_client_id: str = os.getenv("OAUTH_CLIENT_ID", "")
-    oauth_client_secret: str = os.getenv("OAUTH_CLIENT_SECRET", "")
+    PROJECT_NAME : str = "42gg.match.server"
+    DOMAIN : str = "localhost:8000"
+    SECRET_KEY : str
+
+    API_V1_URI: str = "/api/v1"
+    REDIS_URL : str = "redis://localhost:6379/0"
+
+    FORTY_TWO_API_BASE_URL: str = "https://api.intra.42.fr"
+    FORTY_TWO_OAUTH_CLIENT_ID : str
+    FORTY_TWO_OAUTH_CLIENT_SECRET : str
+    FORTY_TWO_OAUTH_REDIRECT_URI : str = "http://locahost:8000/api/v1/auth/login/oauth/42/callback"
 
     class Config:
         case_sensitive = True
+        env_file = ".env"
+        env_file_encoding = 'utf-8'
 
 settings = Settings()
+print(settings.dict())
