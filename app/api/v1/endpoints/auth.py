@@ -22,12 +22,23 @@ router = APIRouter()
 def auth():
     return "This is Auth!"
 
+
+"""
+42 OAuth 로그인 엔드포인트
+세션 쿠키를 전송하며 42 OAuth 로그인 페이지로 리다이렉트합니다.
+로그인 성공시 "/login/oauth/42/callback" 콜백 엔드포인트로 리다이렉트됩니다.
+"""
 @router.get("/login/oauth/42")
 async def forty_two_login(request: Request):
     redirect_uri = settings.FORTY_TWO_OAUTH_REDIRECT_URI
     response = await oauth.forty_two.authorize_redirect(request, redirect_uri)
     return response
 
+"""
+42 OAuth 콜백 엔드포인트
+42 OAuth 로그인 콜백을 처리합니다.
+로그인 성공시 42access_token을 포함한 JWT 토큰을 반환합니다.
+"""
 @router.get("/login/oauth/42/callback")
 async def forty_two_callback(request: Request):
     try:
