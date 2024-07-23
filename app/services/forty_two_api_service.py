@@ -8,6 +8,11 @@ class FortyTwoAPIService:
         self.client_secret = settings.FORTY_TWO_OAUTH_CLIENT_SECRET
 
     async def get_user_info_by_forty_two_access_token(self, forty_two_access_token: str):
+        """
+        42 access_token을 이용하여 사용자 정보를 가져옵니다.
+        :param forty_two_access_token:
+        :return: 42API 사용자 정보
+        """
         user_info = await fetch(
             url="https://api.intra.42.fr/v2/me",
             method="GET",
