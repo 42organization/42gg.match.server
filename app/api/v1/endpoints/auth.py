@@ -1,6 +1,10 @@
+import traceback
+
+from app.schemas.auth import FortyTwoToken
 from fastapi import APIRouter, HTTPException, Request
 from app.core.config import settings
 from authlib.integrations.starlette_client import OAuth
+from app.services.auth_service import auth_service
 
 oauth = OAuth()
 oauth.register(
@@ -38,11 +42,11 @@ async def forty_two_callback(request: Request):
     """
     42 OAuth 콜백 엔드포인트
     42 OAuth 로그인 콜백을 처리합니다.
-    로그인 성공시 42access_token을 포함한 JWT 토큰을 반환합니다.
+    로그인 성공시 42 access_token을 포함한 JWT 토큰을 반환합니다.
     """
     try:
-        token = await oauth.forty_two.authorize_access_token(request)
-
-        return {"token": token}
+        forty_two_token : FortyTwoToken = await oauth.forty_two.authorize_access_token(request)
+        jwt_token = await auth_service.create_jwt_token_from_forty_two_token(forty_two_token)
+        return {"access_token": jwt_token}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
