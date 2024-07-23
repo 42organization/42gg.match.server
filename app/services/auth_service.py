@@ -1,6 +1,8 @@
 from app.schemas.auth import FortyTwoToken
 from app.schemas.user import User
 from app.services.forty_two_api_service import forty_two_api_service
+from app.utils.jwt_token_provider import jwt_provider
+
 
 class AuthService():
     def __init__(self):
@@ -21,7 +23,7 @@ class AuthService():
                 email=forty_two_user_info["email"],
                 forty_two_access_token=token
             )
-            return user
+            return jwt_provider.create_access_token(user.dict())
         except KeyError as e:
             raise ValueError(f"Missing essential user information: {e}")
 
