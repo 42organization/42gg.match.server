@@ -1,7 +1,7 @@
 import traceback
 
 from app.schemas.auth import FortyTwoToken
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, HTTPException, Request, status
 from app.core.config import settings
 from authlib.integrations.starlette_client import OAuth
 from app.services.auth_service import auth_service
@@ -38,7 +38,7 @@ async def forty_two_login(request: Request):
     response = await oauth.forty_two.authorize_redirect(request, redirect_uri)
     return response
 
-@router.get("/login/oauth/42/callback")
+@router.get("/login/oauth/42/callback", status_code=status.HTTP_200_OK)
 async def forty_two_callback(request: Request):
     """
     42 OAuth 콜백 엔드포인트
@@ -50,4 +50,4 @@ async def forty_two_callback(request: Request):
         jwt_token = await auth_service.create_jwt_token_from_forty_two_token(forty_two_token)
         return {"access_token": jwt_token}
     except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
