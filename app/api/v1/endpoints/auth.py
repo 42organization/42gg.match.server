@@ -26,7 +26,7 @@ router = APIRouter()
 def auth():
     return "This is Auth!"
 
-@router.get("/login/oauth/42")
+@router.get("/login/oauth/42", status_code=status.HTTP_302_FOUND)
 async def forty_two_login(request: Request):
     """
     42 OAuth 로그인 엔드포인트
