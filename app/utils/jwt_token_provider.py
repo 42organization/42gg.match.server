@@ -10,14 +10,14 @@ class JwtTokenProvider:
         self.access_token_expire_minutes = settings.ACCESS_TOKEN_EXPIRE_MINUTES
         self.refresh_token_expire_days = settings.REFRESH_TOKEN_EXPIRE_DAYS
 
-    def create_access_token(self, data: dict):
+    def create_access_token(self, data: dict) -> str:
         to_encode = data.copy()
         expire = datetime.now(timezone.utc) + timedelta(minutes=self.access_token_expire_minutes)
         to_encode.update({"exp": expire})
         encoded_jwt = jwt.encode(to_encode, self.secret_key, algorithm=self.algorithm)
         return encoded_jwt
 
-    def create_refresh_token(self, data: dict):
+    def create_refresh_token(self, data: dict) -> str:
         to_encode = data.copy()
         expire = datetime.now(timezone.utc) + timedelta(days=self.refresh_token_expire_days)
         to_encode.update({"exp": expire})
@@ -46,7 +46,7 @@ class JwtTokenProvider:
         except JWTError:
             return True
 
-    def refresh_access_token(self, refresh_token: str):
+    def refresh_access_token(self, refresh_token: str) -> str:
         if self.is_token_expired(refresh_token):
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,

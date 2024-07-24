@@ -1,4 +1,5 @@
 import traceback
+from typing import Any
 
 from app.schemas.auth import FortyTwoToken
 from fastapi import APIRouter, HTTPException, Request, status
@@ -27,7 +28,7 @@ def auth():
     return "This is Auth!"
 
 @router.get("/login/oauth/42", status_code=status.HTTP_302_FOUND)
-async def forty_two_login(request: Request):
+async def forty_two_login(request: Request) -> Any:
     """
     42 OAuth 로그인 엔드포인트
     세션 쿠키를 전송하며 42 OAuth 로그인 페이지로 리다이렉트합니다.
@@ -39,7 +40,7 @@ async def forty_two_login(request: Request):
     return response
 
 @router.get("/login/oauth/42/callback", status_code=status.HTTP_200_OK)
-async def forty_two_callback(request: Request):
+async def forty_two_callback(request: Request) -> Any:
     """
     42 OAuth 콜백 엔드포인트
     42 OAuth 로그인 콜백을 처리합니다.

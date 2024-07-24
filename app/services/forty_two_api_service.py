@@ -7,7 +7,7 @@ class FortyTwoAPIService:
         self.client_id = settings.FORTY_TWO_OAUTH_CLIENT_ID
         self.client_secret = settings.FORTY_TWO_OAUTH_CLIENT_SECRET
 
-    async def get_user_info_by_forty_two_access_token(self, forty_two_access_token: str):
+    async def get_user_info_by_forty_two_access_token(self, forty_two_access_token: str) -> dict:
         """
         42 access_token을 이용하여 사용자 정보를 가져옵니다.
         :param forty_two_access_token:
