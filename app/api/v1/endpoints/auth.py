@@ -1,6 +1,11 @@
-from fastapi import APIRouter, HTTPException, Request
+import traceback
+from typing import Any
+
+from app.schemas.auth import FortyTwoToken
+from fastapi import APIRouter, HTTPException, Request, status
 from app.core.config import settings
 from authlib.integrations.starlette_client import OAuth
+from app.services.auth_service import auth_service
 
 oauth = OAuth()
 oauth.register(
@@ -22,17 +27,28 @@ router = APIRouter()
 def auth():
     return "This is Auth!"
 
-@router.get("/login/oauth/42")
-async def forty_two_login(request: Request):
+@router.get("/login/oauth/42", status_code=status.HTTP_302_FOUND)
+async def forty_two_login(request: Request) -> Any:
+    """
+    42 OAuth 로그인 엔드포인트
+    세션 쿠키를 전송하며 42 OAuth 로그인 페이지로 리다이렉트합니다.
+    로그인 성공시 "/login/oauth/42/callback" 콜백 엔드포인트로 리다이렉트됩니다.
+    TODO: 요청에 따라서 callback주소 변경
+    """
     redirect_uri = settings.FORTY_TWO_OAUTH_REDIRECT_URI
     response = await oauth.forty_two.authorize_redirect(request, redirect_uri)
     return response
 
-@router.get("/login/oauth/42/callback")
-async def forty_two_callback(request: Request):
+@router.get("/login/oauth/42/callback", status_code=status.HTTP_200_OK)
+async def forty_two_callback(request: Request) -> Any:
+    """
+    42 OAuth 콜백 엔드포인트
+    42 OAuth 로그인 콜백을 처리합니다.
+    로그인 성공시 42 access_token을 포함한 JWT 토큰을 반환합니다.
+    """
     try:
-        token = await oauth.forty_two.authorize_access_token(request)
-
-        return {"token": token}
+        forty_two_token : FortyTwoToken = await oauth.forty_two.authorize_access_token(request)
+        jwt_token = await auth_service.create_jwt_token_from_forty_two_token(forty_two_token)
+        return {"access_token": jwt_token}
     except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
