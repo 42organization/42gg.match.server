@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta, timezone
-from jose import jwt, JWTError
+from jose import jwt, JWTError, ExpiredSignatureError
 from fastapi import HTTPException, status
 from app.core.config import settings
 
@@ -26,15 +26,15 @@ class JwtTokenProvider:
 
     def decode_token(self, token: str):
         credentials_exception = HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Could not validate credentials",
-            headers={"WWW-Authenticate": "Bearer"},
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Could not validate credentials"
         )
         try:
             payload = jwt.decode(token, self.secret_key, algorithms=[self.algorithm])
             return payload
-        except JWTError:
+        except (JWTError, ExpiredSignatureError):
             raise credentials_exception
+
 
     def is_token_expired(self, token: str) -> bool:
         try:
